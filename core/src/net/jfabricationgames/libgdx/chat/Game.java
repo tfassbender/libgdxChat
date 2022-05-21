@@ -1,13 +1,17 @@
 package net.jfabricationgames.libgdx.chat;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 
-public class Game extends ApplicationAdapter {
+import net.jfabricationgames.libgdx.chat.screen.LoginScreen;
+
+public class Game extends com.badlogic.gdx.Game {
 	
 	private static Game instance;
 	
 	private Runnable preGameConfigurator;
+	private InputMultiplexer inputMultiplexer;
 	
 	public static synchronized Game createInstance(Runnable preGameConfigurator) {
 		if (instance == null) {
@@ -27,13 +31,18 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void create() {
 		preGameConfigurator.run();
+		
+		inputMultiplexer = new InputMultiplexer();
+		Gdx.input.setInputProcessor(inputMultiplexer);
+		
+		// do not call this from the constructor, or it will cause an UnsatisfiedLinkError when creating a SpriteBatch or a Stage in LoginScreen
+		setScreen(new LoginScreen());
 	}
 	
-	@Override
-	public void render() {
-		ScreenUtils.clear(1, 0, 0, 1);
+	public void addInputProcessor(InputProcessor processor) {
+		inputMultiplexer.addProcessor(processor);
 	}
-	
-	@Override
-	public void dispose() {}
+	public void removeInputProcessor(InputProcessor processor) {
+		inputMultiplexer.removeProcessor(processor);
+	}
 }
