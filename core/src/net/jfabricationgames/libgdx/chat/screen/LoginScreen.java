@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -42,15 +43,12 @@ public class LoginScreen extends ScreenAdapter {
 		labelError = new Label("", skin);
 		labelError.getStyle().fontColor = Color.RED;
 		
-		table.add().fillX();
-		table.add(textFieldName).fillX().uniformX();
-		table.add().fillX();
-		table.row().pad(10, 0, 0, 0);
-		table.add().fillX();
-		table.add(buttonLogin).fillX().uniformX();
-		table.add().fillX();
-		table.row().pad(20, 0, 0, 0);
-		table.add(labelError).colspan(3).width(500);
+		table.columnDefaults(0).minWidth(350);
+		table.add(textFieldName);
+		table.row().padTop(10);
+		table.add(buttonLogin);
+		table.row().padTop(20);
+		table.add(labelError).width(Value.percentHeight(0.7f));
 		labelError.setWrap(true);
 		
 		buttonLogin.addListener(new ChangeListener() {
