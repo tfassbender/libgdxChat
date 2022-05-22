@@ -3,6 +3,7 @@ package net.jfabricationgames.libgdx.chat;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import net.jfabricationgames.libgdx.chat.screen.LoginScreen;
 
@@ -12,6 +13,8 @@ public class Game extends com.badlogic.gdx.Game {
 	
 	private Runnable preGameConfigurator;
 	private InputMultiplexer inputMultiplexer;
+	
+	private Skin skin;
 	
 	public static synchronized Game createInstance(Runnable preGameConfigurator) {
 		if (instance == null) {
@@ -35,6 +38,8 @@ public class Game extends com.badlogic.gdx.Game {
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		
+		skin = new Skin(Gdx.files.internal("skin/rainbow-ui.json"));
+		
 		// do not call this from the constructor, or it will cause an UnsatisfiedLinkError when creating a SpriteBatch or a Stage in LoginScreen
 		setScreen(new LoginScreen());
 	}
@@ -44,5 +49,9 @@ public class Game extends com.badlogic.gdx.Game {
 	}
 	public void removeInputProcessor(InputProcessor processor) {
 		inputMultiplexer.removeProcessor(processor);
+	}
+	
+	public Skin getSkin() {
+		return skin;
 	}
 }

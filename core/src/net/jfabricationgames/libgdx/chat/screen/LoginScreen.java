@@ -36,7 +36,7 @@ public class LoginScreen extends ScreenAdapter {
 		table.setDebug(true);
 		stage.addActor(table);
 		
-		Skin skin = new Skin(Gdx.files.internal("skin/rainbow-ui.json"));
+		Skin skin = Game.getInstance().getSkin();
 		
 		textFieldName = new TextField("", skin);
 		TextButton buttonLogin = new TextButton("Login", skin);
@@ -60,13 +60,6 @@ public class LoginScreen extends ScreenAdapter {
 		});
 	}
 	
-	@Override
-	public void render(float delta) {
-		ScreenUtils.clear(0f, 0f, 0f, 1f);
-		stage.act(delta);
-		stage.draw();
-	}
-	
 	private void login() {
 		Gdx.app.log(getClass().getSimpleName(), "logging in with user name: " + textFieldName.getText());
 		if (textFieldName.getText().isEmpty()) {
@@ -74,7 +67,21 @@ public class LoginScreen extends ScreenAdapter {
 		}
 		else {
 			labelError.setText("");
-			//TODO change to chat screen
+			Game.getInstance().setScreen(new ChatScreen());
+			dispose();
 		}
+	}
+	
+	@Override
+	public void render(float delta) {
+		ScreenUtils.clear(0f, 0f, 0f, 1f);
+		stage.act(delta);
+		stage.draw();
+	}
+	
+	@Override
+	public void dispose() {
+		Game.getInstance().removeInputProcessor(stage);
+		stage.dispose();
 	}
 }
