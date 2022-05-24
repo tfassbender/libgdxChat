@@ -61,13 +61,14 @@ public class LoginScreen extends ScreenAdapter {
 	}
 	
 	private void login() {
-		Gdx.app.log(getClass().getSimpleName(), "logging in with user name: " + textFieldName.getText());
+		String username = textFieldName.getText();
+		Gdx.app.log(getClass().getSimpleName(), "logging in with user name: " + username);
 		if (textFieldName.getText().isEmpty()) {
 			labelError.setText("Cannot login with empty name. Please choose a username to login.");
 		}
 		else {
 			labelError.setText("");
-			Game.getInstance().setScreen(new ChatScreen());
+			Game.getInstance().setScreen(new ChatScreen(username));
 			dispose();
 		}
 	}

@@ -19,8 +19,12 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import net.jfabricationgames.libgdx.chat.Game;
+import net.jfabricationgames.libgdx.chat.network.ChatClient;
+import net.jfabricationgames.libgdx.chat.network.Message;
 
 public class ChatScreen extends ScreenAdapter {
+	
+	private ChatClient chatClient;
 	
 	private Stage stage;
 	
@@ -28,9 +32,11 @@ public class ChatScreen extends ScreenAdapter {
 	private Label labelChat;
 	private List<String> listUsers;
 	
-	public ChatScreen() {
+	public ChatScreen(String username) {
 		stage = new Stage(new ScreenViewport());
 		Game.getInstance().addInputProcessor(stage);
+		
+		chatClient = new ChatClient(username, this::receiveMessage);
 	}
 	
 	@Override
@@ -86,10 +92,13 @@ public class ChatScreen extends ScreenAdapter {
 	private void sendMessage() {
 		String message = textAreaMessage.getText();
 		if (!message.isEmpty()) {
-			//TODO send the message
-			
+			chatClient.sendChatMessage(message);
 			textAreaMessage.setText("");
 		}
+	}
+	
+	private void receiveMessage(Message message) {
+		//TODO
 	}
 	
 	@Override
