@@ -35,6 +35,7 @@ public class ChatScreen extends ScreenAdapter {
 	
 	private TextArea textAreaMessage;
 	private Label labelChat;
+	private ScrollPane scrollPaneChat;
 	private List<String> listUsers;
 	private Array<String> loggedInUsers;
 	
@@ -54,7 +55,7 @@ public class ChatScreen extends ScreenAdapter {
 	public void show() {
 		Table table = new Table();
 		table.setFillParent(true);
-		table.setDebug(true);
+		//table.setDebug(true);
 		stage.addActor(table);
 		
 		Skin skin = Game.getInstance().getSkin();
@@ -62,7 +63,7 @@ public class ChatScreen extends ScreenAdapter {
 		labelChat = new Label("", skin);
 		labelChat.setWrap(true);
 		labelChat.getStyle().fontColor = Color.WHITE;
-		ScrollPane scrollPaneChat = new ScrollPane(labelChat, skin);
+		scrollPaneChat = new ScrollPane(labelChat, skin);
 		
 		listUsers = new List<>(skin);
 		listUsers.setItems(loggedInUsers);
@@ -98,7 +99,7 @@ public class ChatScreen extends ScreenAdapter {
 		table.add(scrollPaneChat).width(400);
 		table.add(scrollPaneUsers).width(250);
 		table.row();
-		table.add(textAreaMessage);
+		table.add(textAreaMessage).fillX();
 		table.add(buttonSend);
 	}
 	
@@ -129,6 +130,8 @@ public class ChatScreen extends ScreenAdapter {
 		String text = labelChat.getText().toString();
 		text += "\n" + username + ": " + message;
 		labelChat.setText(text);
+		
+		scrollPaneChat.scrollTo(0, 0, 0, 0);
 	}
 	
 	private void updateUserList() {

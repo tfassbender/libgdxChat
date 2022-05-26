@@ -33,7 +33,7 @@ public class LoginScreen extends ScreenAdapter {
 	public void show() {
 		Table table = new Table();
 		table.setFillParent(true);
-		table.setDebug(true);
+		//table.setDebug(true);
 		stage.addActor(table);
 		
 		Skin skin = Game.getInstance().getSkin();
