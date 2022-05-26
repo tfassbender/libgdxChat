@@ -1,10 +1,13 @@
-package net.jfabricationgames.libgdx.chat.network;
+package net.jfabricationgames.libgdx.chat.network.client;
 
 import java.util.function.Consumer;
 
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+
+import net.jfabricationgames.libgdx.chat.network.message.Message;
+import net.jfabricationgames.libgdx.chat.network.message.MessageType;
 
 public class ChatClientListener extends Listener {
 	
@@ -26,7 +29,10 @@ public class ChatClientListener extends Listener {
 	
 	@Override
 	public void received(Connection connection, Object object) {
-		receiveMessageConsumer.accept(object.toString());
+		if (object instanceof String) {
+			Gdx.app.debug(getClass().getSimpleName(), "received message from server: " + object);
+			receiveMessageConsumer.accept((String) object);
+		}
 	}
 	
 	@Override

@@ -3,6 +3,7 @@ package net.jfabricationgames.libgdx.chat.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -15,14 +16,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import net.jfabricationgames.libgdx.chat.Game;
-import net.jfabricationgames.libgdx.chat.network.ChatClient;
-import net.jfabricationgames.libgdx.chat.network.Message;
+import net.jfabricationgames.libgdx.chat.network.client.ChatClient;
+import net.jfabricationgames.libgdx.chat.network.message.Message;
+import net.jfabricationgames.libgdx.chat.network.message.MessageType;
 
 public class ChatScreen extends ScreenAdapter {
+	
+	private String username;
 	
 	private ChatClient chatClient;
 	
@@ -31,10 +36,16 @@ public class ChatScreen extends ScreenAdapter {
 	private TextArea textAreaMessage;
 	private Label labelChat;
 	private List<String> listUsers;
+	private Array<String> loggedInUsers;
 	
 	public ChatScreen(String username) {
+		this.username = username;
+		
 		stage = new Stage(new ScreenViewport());
 		Game.getInstance().addInputProcessor(stage);
+		
+		loggedInUsers = new Array<>();
+		loggedInUsers.add(username);
 		
 		chatClient = new ChatClient(username, this::receiveMessage);
 	}
@@ -50,9 +61,11 @@ public class ChatScreen extends ScreenAdapter {
 		
 		labelChat = new Label("", skin);
 		labelChat.setWrap(true);
+		labelChat.getStyle().fontColor = Color.WHITE;
 		ScrollPane scrollPaneChat = new ScrollPane(labelChat, skin);
 		
 		listUsers = new List<>(skin);
+		listUsers.setItems(loggedInUsers);
 		ScrollPane scrollPaneUsers = new ScrollPane(listUsers, skin);
 		
 		textAreaMessage = new TextArea("", skin);
@@ -90,15 +103,36 @@ public class ChatScreen extends ScreenAdapter {
 	}
 	
 	private void sendMessage() {
-		String message = textAreaMessage.getText();
+		String message = textAreaMessage.getText().trim();
 		if (!message.isEmpty()) {
 			chatClient.sendChatMessage(message);
+			appendChatText(username, message);
 			textAreaMessage.setText("");
 		}
 	}
 	
 	private void receiveMessage(Message message) {
-		//TODO
+		if (message.type == MessageType.LOGIN) {
+			loggedInUsers.add(message.user);
+			updateUserList();
+		}
+		else if (message.type == MessageType.LOGOUT) {
+			loggedInUsers.removeValue(message.user, false);
+			updateUserList();
+		}
+		else if (message.type == MessageType.CHAT) {
+			appendChatText(message.user, message.text);
+		}
+	}
+	
+	private void appendChatText(String username, String message) {
+		String text = labelChat.getText().toString();
+		text += "\n" + username + ": " + message;
+		labelChat.setText(text);
+	}
+	
+	private void updateUserList() {
+		listUsers.setItems(loggedInUsers);
 	}
 	
 	@Override

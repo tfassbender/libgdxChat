@@ -1,4 +1,4 @@
-package net.jfabricationgames.libgdx.chat.network;
+package net.jfabricationgames.libgdx.chat.network.client;
 
 import java.io.IOException;
 import java.util.function.Consumer;
@@ -8,10 +8,10 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Json;
 import com.esotericsoftware.kryonet.Client;
 
+import net.jfabricationgames.libgdx.chat.network.Network;
+import net.jfabricationgames.libgdx.chat.network.message.Message;
+
 public class ChatClient implements Disposable {
-	
-	private static final int PORT = 4711;
-	private static final String HOST = "localhost";
 	
 	private Client client;
 	private String username;
@@ -36,7 +36,7 @@ public class ChatClient implements Disposable {
 	
 	private void connect() {
 		try {
-			client.connect(5000, HOST, PORT);
+			client.connect(5000, Network.HOST, Network.PORT);
 		}
 		catch (IOException e) {
 			Gdx.app.error(getClass().getSimpleName(), "Connection cound not be established", e);
@@ -60,7 +60,6 @@ public class ChatClient implements Disposable {
 	
 	@Override
 	public void dispose() {
-		sendMessage(new Message(MessageType.LOGOUT).setUser(username));
 		client.stop();
 	}
 }
