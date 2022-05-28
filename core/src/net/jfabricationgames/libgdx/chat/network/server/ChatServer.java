@@ -2,7 +2,9 @@ package net.jfabricationgames.libgdx.chat.network.server;
 
 import java.io.IOException;
 
-import com.badlogic.gdx.Gdx;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.utils.Json;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -13,6 +15,8 @@ import net.jfabricationgames.libgdx.chat.network.message.Message;
 import net.jfabricationgames.libgdx.chat.network.message.MessageType;
 
 public class ChatServer {
+	
+	private static final Logger log = LoggerFactory.getLogger(ChatServer.class);
 	
 	private Server server;
 	
@@ -46,17 +50,21 @@ public class ChatServer {
 	}
 	
 	public void start() throws IOException {
+		log.info("Starting server on port: {}", Network.PORT);
 		server.bind(Network.PORT);
 		server.start();
+		log.info("Server successfully started on port: {}", Network.PORT);
 	}
 	
 	private void handleMessage(ChatConnection connection, String messageString) {
 		Message message = json.fromJson(Message.class, messageString);
 		
 		if (message == null) {
-			Gdx.app.error(getClass().getSimpleName(), "The message string could not be parsed to Message.class: " + messageString);
+			log.error("The message string could not be parsed to Message.class: {}", messageString);
 		}
 		else {
+			log.debug("Received message from {}: type: {} - text: {}", message.user, message.type, message.text);
+			
 			if (message.type == MessageType.LOGIN) {
 				String name = message.user;
 				if (name != null) {
