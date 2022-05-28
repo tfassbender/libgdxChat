@@ -12,10 +12,10 @@ import net.jfabricationgames.libgdx.chat.network.message.MessageType;
 public class ChatClientListener extends Listener {
 	
 	public Consumer<Message> sendMessageConsumer;
-	public Consumer<String> receiveMessageConsumer;
+	public Consumer<Message> receiveMessageConsumer;
 	public String username;
 	
-	public ChatClientListener(Consumer<Message> sendMessageConsumer, Consumer<String> receiveMessageConsumer, String username) {
+	public ChatClientListener(Consumer<Message> sendMessageConsumer, Consumer<Message> receiveMessageConsumer, String username) {
 		this.username = username;
 		this.sendMessageConsumer = sendMessageConsumer;
 		this.receiveMessageConsumer = receiveMessageConsumer;
@@ -29,9 +29,9 @@ public class ChatClientListener extends Listener {
 	
 	@Override
 	public void received(Connection connection, Object object) {
-		if (object instanceof String) {
+		if (object instanceof Message) {
 			Gdx.app.debug(getClass().getSimpleName(), "received message from server: " + object);
-			receiveMessageConsumer.accept((String) object);
+			receiveMessageConsumer.accept((Message) object);
 		}
 	}
 	

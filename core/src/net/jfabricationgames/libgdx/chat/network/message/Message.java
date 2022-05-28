@@ -9,6 +9,7 @@ public class Message {
 	public Message() {
 		this(MessageType.CHAT);
 	}
+	
 	public Message(MessageType type) {
 		this.type = type;
 	}
@@ -28,4 +29,8 @@ public class Message {
 		return this;
 	}
 	
+	@Override
+	public String toString() {
+		return "Message [user=" + user + ", text=" + text + ", type=" + type + "]";
+	}
 }
