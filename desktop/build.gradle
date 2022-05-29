@@ -2,8 +2,8 @@ sourceCompatibility = 1.8
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.resources.srcDirs = ["../core/assets"]
 
-project.ext.mainClassName = "net.jfabricationgames.libgdx.chat.DesktopLauncher"
-project.ext.mainClassServerName = "net.jfabricationgames.libgdx.chat.network.server.ChatServerMain"
+project.ext.mainClassName = "net.jfabricationgames.libgdx.chat.client.DesktopLauncher"
+project.ext.mainClassServerName = "net.jfabricationgames.libgdx.chat.server.ChatServerMain"
 project.ext.assetsDir = new File("../core/assets")
 
 import org.gradle.internal.os.OperatingSystem
@@ -31,6 +31,8 @@ task debug(dependsOn: classes, type: JavaExec) {
 }
 
 task dist(type: Jar) {
+    archiveBaseName = 'libGdxChat-client'
+    
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
     manifest {
         attributes 'Main-Class': project.mainClassName
@@ -43,6 +45,8 @@ task dist(type: Jar) {
 }
 
 task distServer(type: Jar) {
+    archiveBaseName = 'libGdxChat-server'
+    
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
     manifest {
         attributes 'Main-Class': project.mainClassServerName

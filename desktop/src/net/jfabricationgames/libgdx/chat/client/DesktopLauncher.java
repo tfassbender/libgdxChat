@@ -1,8 +1,9 @@
-package net.jfabricationgames.libgdx.chat;
+package net.jfabricationgames.libgdx.chat.client;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
+import net.jfabricationgames.libgdx.chat.Game;
 import net.jfabricationgames.libgdx.desktop.log.LogConfiguration;
 
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument

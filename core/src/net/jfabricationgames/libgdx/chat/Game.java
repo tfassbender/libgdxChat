@@ -47,6 +47,7 @@ public class Game extends com.badlogic.gdx.Game {
 	public void addInputProcessor(InputProcessor processor) {
 		inputMultiplexer.addProcessor(processor);
 	}
+	
 	public void removeInputProcessor(InputProcessor processor) {
 		inputMultiplexer.removeProcessor(processor);
 	}
